@@ -1,4 +1,4 @@
-from constants import LINE_WIDTH
+from constants import *
 import pygame
 
 
@@ -25,5 +25,15 @@ class CircleShape(pygame.sprite.Sprite):
         pygame.draw.polygon(screen, "white",self.triangle(),width=LINE_WIDTH)
 
     def update(self, dt: float) -> None:
-        # must override
+
         pass
+
+    def wrap_position(self) -> None:
+            if self.position.x > SCREEN_WIDTH:
+                self.position.x = 0
+            if self.position.x < 0:
+                self.position.x = SCREEN_WIDTH
+            if self.position.y > SCREEN_HEIGHT:
+                self.position.y = 0
+            if self.position.y < 0:
+                self.position.y = SCREEN_HEIGHT
