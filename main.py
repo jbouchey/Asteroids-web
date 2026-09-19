@@ -11,12 +11,13 @@ async def main():
     pygame.init()
     pygame.font.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    background = pygame.image.load("./assets/background.png")
     clock = pygame.time.Clock()
     font = pygame.font.Font(None, 64)
     small_font = pygame.font.Font(None, 32)
 
     while True:
-        result = await run_game(screen, clock)
+        result = await run_game(screen, clock,background)
         if result == "quit":
             return
         waiting = True
@@ -26,7 +27,7 @@ async def main():
                     return
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                     waiting = False
-            screen.fill("black")
+            screen.blit(background, (0, 0))
             game_over_text = font.render("GAME OVER", True, "white")
             restart_text = small_font.render("Press R to restart", True, "white")
             screen.blit(game_over_text, game_over_text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 20)))
@@ -35,7 +36,7 @@ async def main():
             clock.tick(60)
             await asyncio.sleep(0)
 
-async def run_game(screen, clock):
+async def run_game(screen, clock, background):
     dt = 0.0
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -53,7 +54,7 @@ async def run_game(screen, clock):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return "quit"
-        screen.fill("black")
+        screen.blit(background, (0, 0))
         updatable.update(dt)
         for asteroid in asteroids:
             if player.collides_with(asteroid):
